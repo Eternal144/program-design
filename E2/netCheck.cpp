@@ -92,18 +92,5 @@ int main(){
         }
         cout << endl;
     }
-
-    // vector<int> a;
-    // a.push_back(3);
-    // a.push_back(5);
-    // a.push_back(8);
-    // a.push_back(2);
-    // 
-    // if(it == a.end()){
-    //     cout<<"没找到的"<<endl;
-    // }else{
-    //     cout<<"找到了"<<endl;
-    // }
-    
     return 0;
 }
