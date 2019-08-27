@@ -14,6 +14,7 @@ public class STree {
 		}
 		return tree;
 	}
+	
 	private SNode search(SNode tree, int key) {
 		if(tree == null) {
 			return null;
@@ -27,9 +28,11 @@ public class STree {
 			return tree;
 		}
 	}
+	
 	public SNode search(int key) {
 		return search(root, key);
 	}
+	
 	private SNode insert(SNode tree,int key) {
 		if(tree == null ) {
 			return new SNode(key, null, null);

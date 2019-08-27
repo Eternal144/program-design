@@ -1,7 +1,7 @@
 package binaryTree;
 
 public class Main {
-	static int NUMBER = 29760;
+	static int NUMBER = 10000;
 	public static void main(String[] args) {
 		int[] arr ;
 		arr = new int[NUMBER];
@@ -13,6 +13,10 @@ public class Main {
 		long startTime=System.currentTimeMillis(); 
 		for(int x : arr) {
 			tree.insert(x);
+			if(x == 10000) {
+				System.out.println("确实1w我也添加了");
+
+			}
 		}
 		long endTime=System.currentTimeMillis();
 //		long startTime=System.currentTimeMillis(); 
