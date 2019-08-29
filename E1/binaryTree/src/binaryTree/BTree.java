@@ -1,5 +1,8 @@
 package binaryTree;
 
+import javax.xml.transform.Templates;
+
+import org.w3c.dom.Node;
 
 public class BTree {
 	BNode root;
@@ -28,20 +31,36 @@ public class BTree {
 		if(tree.key == key ) {
 			return;
 		}
-		if(tree.key > key) {
-			if(tree.left == null) {
+		while(tree.key > key) { 
+			if( tree.left != null) {
+				tree = tree.left;
+			}else {
 				tree.left = new BNode(key);
-			}else {
-				insert(tree.left,key);
-			}
-		}else {
-			if(tree.right == null) {
-				tree.right = new BNode(key);
-			}else {
-				insert(tree.right,key);
+				tree.left.parent = tree;
 			}
 		}
-	
+		while(tree.key < key) {
+			if( tree.right != null) {
+				tree = tree.right;
+			}else {
+				tree.right = new BNode(key);
+				tree.right.parent = tree;
+			}
+		}
+		//递归实现，3w左右栈溢出。
+//		if(tree.key > key) {
+//			if(tree.left == null) {
+//				tree.left = new BNode(key);
+//			}else {
+//				insert(tree.left,key);
+//			}
+//		}else {
+//			if(tree.right == null) {
+//				tree.right = new BNode(key);
+//			}else {
+//				insert(tree.right,key);
+//			}
+//		}
 	}
 	public void insert(int key) {
 		if(root == null) {
@@ -65,50 +84,70 @@ public class BTree {
 	}
 	//寻找以该节点为父节点最大的值。
 	BNode maxKeyNode(BNode node) {
-		if(node.right != null) {
-			return maxKeyNode(node.right);
-		}else {
-			return node;
+		while(node!=null && node.right != null) {
+			node = node.right;
 		}
+		return node;
 	}
-	private BNode removeMax(BNode node) {
-		if(node.right == null) {
-			BNode rBNode = node.left;
-			node.left = null;
-			return rBNode;
-		}else {
-			node.right = removeMax(node.right);
-			return node;
+	//移除以该节点为根节点的最大节点。
+	private void removeMax(BNode node) {
+		while(node!= null && node.right != null) {
+			node = node.right;
 		}
+		node.parent = null;
 	}
-	//删除一个节点
-	private BNode remove(BNode tree,int key) {
+	//删除一个节点，
+	private void remove(BNode tree,int key) {
 		if(tree ==  null) {
-			return null;
+			return;
 		}
-		if(key < tree.key) {
-			tree.left = remove(tree.left, key);
-			return tree;
-		}else if(key > tree.key) {
-			tree.right = remove(tree.right, key);
-			return tree;
-		}else {
-			if(tree.left == null) {
-				BNode rBNode = tree.right;
-				tree.right = null;
-				return rBNode;
-			}else if(tree.right == null) {
-				BNode lBNode = tree.left;
-				tree.left = null;
-				return lBNode;
+		while( key < tree.key ) { //如果不相等，一定是要删的。
+			if(tree.left != null) {
+				tree = tree.left;
 			}else {
-				BNode maxNode = removeMax(tree.left);
-				tree.key = maxNode.key;
-				return tree;
+				System.out.println("该点不存在"); //比你小，你左边还没点了。
+			}
+		}
+		while(key > tree.key ) {
+			if(tree.right != null) {
+				tree = tree.right;
+			}else {
+				System.out.println("该点不存在。"); //比你大，你右边还没点了
+			}
+		}
+		if( key == tree.key) { //就是要删了你。
+			BNode parent = tree.parent; 
+			int maxKey =  maxKeyNode(tree).key;
+			if(parent == null) { //删除根节点。
+				if(tree.left != null) {
+//					root = maxKeyNode(tree);
+					removeMax(tree); //在原处移除。
+					root.key = maxKey;
+				}else {
+					root = tree.right; //右边还有，左边没有，直接左边为根节点。
+				}
+				return;
+			}
+			//后面都是非根节点情况。
+			if( tree.left != null) { //左边不为空
+				removeMax(tree); //将树最左边的移除掉。
+				if(key < parent.key) { 
+					parent.left.key = maxKey;
+				}else {
+					parent.right.key = maxKey;
+				}
+			}else if(tree.right != null) { //左边为空，右边不为空。直接指向右边就可以。
+				if(key < parent.key) {
+					parent.left = tree.right;
+				}else {
+					parent.right = tree.right;
+				}
+			}else { 
+				tree.parent = null;
 			}
 		}
 	}
 	public void remove(int key) {
-		root = remove(root,key);
+		remove(root,key);
 	}
 }

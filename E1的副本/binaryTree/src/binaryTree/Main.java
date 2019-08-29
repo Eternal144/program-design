@@ -1,7 +1,7 @@
 package binaryTree;
 
 public class Main {
-	static int NUMBER = 50000;
+	static int NUMBER = 10000;
 	public static void main(String[] args) {
 		int[] arr ;
 		arr = new int[NUMBER];
@@ -10,7 +10,7 @@ public class Main {
 //			System.out.println(arr[i]);
 		}
 		BTree tree = new BTree();
-//		long startTime=System.currentTimeMillis(); 
+		long startTime=System.currentTimeMillis(); 
 		for(int x : arr) {
 			tree.insert(x);
 			if(x == 1020) {
@@ -18,15 +18,12 @@ public class Main {
 
 			}
 		}
-//		long endTime=System.currentTimeMillis();
-		long startTime=System.currentTimeMillis(); 
-		for(int x : arr) {
-			if(x == 50000) {
-				System.out.println("的确删到5w了");
-			}
-			tree.remove(x);
-		}
 		long endTime=System.currentTimeMillis();
+//		long startTime=System.currentTimeMillis(); 
+//		for(int x : arr) {
+//			tree.remove(x);
+//		}
+//		long endTime=System.currentTimeMillis();
 //		System.out.println(endTime);
 		System.out.println("程序运行时间： "+(endTime - startTime)+"ms");
 //		tree.print();
