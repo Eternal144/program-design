@@ -1,28 +1,36 @@
 package binaryTree;
 
-import javax.xml.transform.Templates;
-
-import org.w3c.dom.Node;
-
 public class BTree {
 	BNode root;
-	public BNode getRoot;
 	public BTree() {
 		root = null;
 	}
-	//查找在树中是否有key=x的节点
+	//查找在树中是否有key=x的节点.递归和非递归
 	private BNode search(BNode node,int key) {
 		if(node == null) {
 			return null;
 		}
-		if(node.key == key) {
-			return node;
-		}else if(node.key > key) {
-			return search( node.left,key);
-		}else {
-			return search(node.right,key);
+		while(true) {
+			if(node.key ==key ) { //找到了
+				return node;
+			}
+			while(node.key < key) {
+				if(node.right != null) {
+					node = node.right;
+				}else {
+					return node; //没找到，返回最近的父节点。方便插入的时候直接插入
+				}
+			}
+			while(node.key > key) {
+				if(node.left != null) {
+					node = node.left;
+				}else {
+					return node;
+				}
+			}
 		}
 	}
+	
 	public BNode search(int key) {
 		return search(root,key);
 	}
@@ -31,22 +39,13 @@ public class BTree {
 		if(tree.key == key ) {
 			return;
 		}
-		while(tree.key > key) { 
-			if( tree.left != null) {
-				tree = tree.left;
-			}else {
-				tree.left = new BNode(key);
-				tree.left.parent = tree;
-			}
+		BNode node = search(key);
+		if(node.key < key) {
+			node.right = new BNode(key);
+		}else if(node.key > key) {
+			node.left = new BNode(key);
 		}
-		while(tree.key < key) {
-			if( tree.right != null) {
-				tree = tree.right;
-			}else {
-				tree.right = new BNode(key);
-				tree.right.parent = tree;
-			}
-		}
+		
 		//递归实现，3w左右栈溢出。
 //		if(tree.key > key) {
 //			if(tree.left == null) {
