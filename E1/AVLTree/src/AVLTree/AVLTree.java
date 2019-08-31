@@ -126,6 +126,7 @@ public class AVLTree {
 	    tree.height = max( getHeight(tree.left), getHeight(tree.right)) + 1;
 	    return tree;
 	}
+	
 	public void insert(int key) {
 		root = this.insert(root,key);
 	}

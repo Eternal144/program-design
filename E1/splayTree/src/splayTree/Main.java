@@ -1,34 +1,55 @@
 package splayTree;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 public class Main {
-	static int NUMBER = 10000;
+	static int NUMBER = 1010;
+	static int TIMES = 4000;
 	public static void main(String[] args) {
-		int[] arr ; 
-//		int arr[] = {8,4,30,26,9,38,1,3,5,7,33,39,31,34};
+		Set<Integer> set = new HashSet<Integer>();
+		int[] arr;
+		int[] reverse;
+		long[] time;
 		arr = new int[NUMBER];
+		reverse = new int[NUMBER];
+		time = new long[TIMES];
+		Random rand = new Random();
 		for(int i = 0; i < NUMBER;i++) {
-			arr[i] = 1000+i;
+			int temp = rand.nextInt(100000);
+			if(!set.contains(temp)) {
+				set.add(temp);
+			}
+//			arr[i] = i;
+//			reverse[i] = NUMBER - i - 1;
 //			System.out.println(arr[i]);
 		}
-		STree tree = new STree();
-//		long startTime=System.currentTimeMillis(); 
-		for(int x : arr) {
-			tree.insert(x);
+		System.out.println(set.size());
+		for(int i = 0; i < TIMES; i++) {
+			STree tree = new STree();
+			
+//			for(int x : arr) {
+//				tree.insert(x);
+//			}
+//			
+//			for(int z : arr) {
+//				tree.remove(z);
+//			}
+			for(int x : set) {
+				tree.insert(x);
+			}
+			long startTime =  System.currentTimeMillis();
+			for( int z : set) {
+				tree.remove(z);
+			}
+			long endTime=System.currentTimeMillis();
+			time[i] = endTime -startTime;
 		}
-//		long endTime=System.currentTimeMillis();
-		long startTime = System.currentTimeMillis(); 
-		//删除这里错了。
-		for(int x : arr) {
-			tree.remove(x);
+		long allTime = 0;
+		for( long y : time) {
+			allTime += y;
 		}
-		long endTime = System.currentTimeMillis();
-		System.out.println("程序运行时间： "+(endTime - startTime)+"ms");
-//		tree.print();
-//		System.out.println();
-//		tree.search(33);
-//		tree.remove(31);
-//		tree.print();
+		System.out.println(allTime);
+		System.out.println("程序运行时间： "+(allTime/(float)TIMES)+"ms");
 	}
 }
-
-//只改了search，就从5k溢出变成了7k溢出。

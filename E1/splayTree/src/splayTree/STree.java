@@ -95,9 +95,6 @@ public class STree {
 	
 	//使用自底向上进行伸展，tree为根节点，key为要移到根节点的key。重新赋值parent。
 	private SNode splay(SNode tree, int key) {
-		if(tree == null) {
-			return tree;
-		}
 		SNode node = search(key); //找到它的位置。
 		SNode parent = node.parent;
 		SNode pparent;

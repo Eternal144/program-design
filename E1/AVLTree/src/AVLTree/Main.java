@@ -1,29 +1,55 @@
 package AVLTree;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 public class Main {
-	static int NUMBER = 10000;
+	static int NUMBER = 1008;
+	static int TIMES = 20000;
 	public static void main(String[] args) {
-		int[] arr ;
-		arr = new int[NUMBER];
+		Set<Integer> set = new HashSet<Integer>();
+//		int[] arr;
+//		int[] reverse;
+		long[] time;
+//		arr = new int[NUMBER];
+//		reverse = new int[NUMBER];
+		time = new long[TIMES];
+		Random rand = new Random();
 		for(int i = 0; i < NUMBER;i++) {
-			arr[i] = 1000+i;
+			int temp = rand.nextInt(100000);
+			if(!set.contains(temp)) {
+				set.add(temp);
+			}
+//			arr[i] = i;
+//			reverse[i] = NUMBER - i -1;
 //			System.out.println(arr[i]);
 		}
-		AVLTree tree = new AVLTree();
-		long startTime=System.currentTimeMillis(); 
-		for (int x : arr) {
-			if(x == 10000) {
-				System.out.println("确实插入了1w");
-			}
-			tree.insert(x);
-		}
-		long endTime=System.currentTimeMillis();
-//		long startTime=System.currentTimeMillis(); 
-		for(int x : arr) {
+		System.out.println(set.size());
+		for(int i = 0; i < TIMES; i++) {
+			AVLTree tree = new AVLTree();
 			
-			tree.remove(x);
+//			for(int x : arr) {
+//				tree.insert(x);
+//			}
+			
+			for(int x : set) {
+			tree.insert(x);
+			}
+			long startTime =  System.currentTimeMillis();
+			for( int z : set) {
+				tree.remove(z);
+			}
+//			for(int z : arr) {
+//				tree.remove(z);
+//			}
+			long endTime=System.currentTimeMillis();
+			time[i] = endTime -startTime;
 		}
-		
-		System.out.println("程序运行时间： "+(endTime - startTime)+"ms");
+		long allTime = 0;
+		for( long y : time) {
+			allTime += y;
+		}
+		System.out.println(allTime);
+		System.out.println("程序运行时间： "+(allTime/(float)TIMES)+"ms");
 	}
 }

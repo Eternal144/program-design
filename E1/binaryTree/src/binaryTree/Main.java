@@ -1,34 +1,56 @@
 package binaryTree;
+import java.util.*;
 
 public class Main {
-	static int NUMBER = 50000;
+	static int NUMBER = 10500;
+	static int TIMES = 400;
 	public static void main(String[] args) {
-		int[] arr ;
+		Set<Integer> set = new HashSet<Integer>();
+		int[] arr;
+		int[] reverse;
+		long[] time;
 		arr = new int[NUMBER];
-		for(int i = 0; i < NUMBER;i++) {
-			arr[i] = 1000+i;
-//			System.out.println(arr[i]);
-		}
-		BTree tree = new BTree();
-//		long startTime=System.currentTimeMillis(); 
-		for(int x : arr) {
-			tree.insert(x);
-			if(x == 1020) {
-				System.out.println("确实1w我也添加了");
-
+		reverse = new int[NUMBER];
+		time = new long[TIMES];
+		Random rand = new Random();
+		set.clear();
+		for(int i = 0; i < NUMBER;i++) { //在这里插入随机数。最好保证都不一样？
+			int temp = rand.nextInt(100000);
+//			System.out.println(set);
+			if(!set.contains(temp)) {
+				set.add(temp);
 			}
+//			arr[i] = i;
+//			reverse[i] = NUMBER - i - 1;
 		}
-//		long endTime=System.currentTimeMillis();
-		long startTime=System.currentTimeMillis(); 
-		for(int x : arr) {
-			if(x == 50000) {
-				System.out.println("的确删到5w了");
+		System.out.println(set.size());
+		for(int i = 0; i < TIMES; i++) {
+			BTree tree = new BTree();
+			long startTime =  System.currentTimeMillis();
+			for(int x : set) {
+				tree.insert(x);
 			}
-			tree.remove(x);
+			long endTime=System.currentTimeMillis();
+//			for( int z : set) {
+//				tree.remove(z);
+//			}
+			
+			time[i] = endTime -startTime;
+//			for(int x : arr) {
+//				tree.insert(x);
+//			}
+//			for(int z : reverse) {
+//				tree.remove(z);
+//			}
 		}
-		long endTime=System.currentTimeMillis();
-//		System.out.println(endTime);
-		System.out.println("程序运行时间： "+(endTime - startTime)+"ms");
+		
+		long allTime = 0;
+		for( long y : time) {
+			allTime += y;
+		}
+		System.out.println(allTime);
+		System.out.println("程序运行时间： "+(allTime/(float)TIMES)+"ms");
+		
 //		tree.print();
 //		System.out.println(tree.maxKeyNode(root).key);
     }
