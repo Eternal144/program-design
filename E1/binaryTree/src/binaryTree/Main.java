@@ -2,7 +2,7 @@ package binaryTree;
 import java.util.*;
 
 public class Main {
-	static int NUMBER = 10500;
+	static int NUMBER = 10000;
 	static int TIMES = 400;
 	public static void main(String[] args) {
 		Set<Integer> set = new HashSet<Integer>();
@@ -23,17 +23,19 @@ public class Main {
 //			arr[i] = i;
 //			reverse[i] = NUMBER - i - 1;
 		}
-		System.out.println(set.size());
+		System.out.println("总共取了" + set.size() + "个点");
 		for(int i = 0; i < TIMES; i++) {
 			BTree tree = new BTree();
-			long startTime =  System.currentTimeMillis();
+			
 			for(int x : set) {
 				tree.insert(x);
 			}
+			
+			long startTime =  System.currentTimeMillis();
+			for( int z : set) {
+				tree.remove(z);
+			}
 			long endTime=System.currentTimeMillis();
-//			for( int z : set) {
-//				tree.remove(z);
-//			}
 			
 			time[i] = endTime -startTime;
 //			for(int x : arr) {
@@ -48,7 +50,7 @@ public class Main {
 		for( long y : time) {
 			allTime += y;
 		}
-		System.out.println(allTime);
+		System.out.println("总时间为： " + allTime);
 		System.out.println("程序运行时间： "+(allTime/(float)TIMES)+"ms");
 		
 //		tree.print();

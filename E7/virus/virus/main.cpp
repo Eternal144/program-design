@@ -9,7 +9,9 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <fstream>
 #include <map>
+#define random(x)(rand()%x)
 using namespace std;
 struct Point{
     int x; //横坐标
@@ -25,15 +27,14 @@ private:
     map<int,int> infNum;
     vector<vector<int>> computers; //记录电脑的防御能力
     vector<vector<Point>> root; //记录根部的二维数组。
-    vector<vector<vector<Point>>> tracer;
+    vector<vector<vector<Point>>> tracer; //指向虚拟根节点
 public:
     Virus(int n, int m){
         row = n;
         col = m;
         normalN = 0;
     }
-    void init(){ //手动初始化这些向量
-        //先建好二维数组。
+    void init(){ //手动初始化这些向量,先建好二维数组。
         vector<int> tempInt;
         tempInt.resize(col,0);
         vector<Point> tempPoint;
@@ -51,8 +52,8 @@ public:
             root.push_back(tempPoint);
             tracer.push_back(tempList);
         }
-        
     }
+    
     Point findRoot(int x, int y){
         Point p;
         if(root[x][y].x == -1){
@@ -147,8 +148,8 @@ public:
                     p1.x = p.x-1; p1.y = p.y;
                     computers[p1.x][p1.y] = type;
                     infNum[type] = ++infNum[type];
+                    normalN--;
                     infPoint[type].push_back(p1);
-                    
                 }else{
                     vector<Point> temp = tracer[p1.x][p1.y]; //找到所有要被感染的点；
                     for(int j=0; j<temp.size(); j++){
@@ -156,6 +157,7 @@ public:
                         computers[p1.x][p1.y] = type;
                         infPoint[type].push_back(p1);
                         infNum[type] =  ++infNum[type];
+                        normalN--;
                     }
                 }
             }
@@ -170,7 +172,6 @@ public:
                     infNum[type] = ++infNum[type];
                     normalN--;
                     infPoint[type].push_back(p1);
-                    
                 }else{
                     vector<Point> temp = tracer[p1.x][p1.y];
                     for(int j=0; j<temp.size(); j++){
@@ -204,8 +205,6 @@ public:
                         normalN--;
                     }
                 }
-                
-                
             }
         }
         if(p.x < col-1){ //检查右边。
@@ -232,21 +231,19 @@ public:
             }
         }
     }
-
     void Infection(){ //开始感染。
         int day = -1;
         while(normalN > 0){ //只要还有电脑没感染。
-            for(int i=1; i<=infPoint.size(); i++){ //有多少种类型的就要遍历多少次。
+            for(int i=1; i <=infPoint.size(); i++){ //有多少种类型的就要遍历多少次。
                 Point p;
                 for(int j = 0; j < infPoint[i].size(); j++){
                     p = infPoint[i][j];//被感染的电脑。传播到四周。
                     spread(p,day);
                 }
-        }
+            }
         day--;
+        }
     }
-    }
-    
     void solve(){
         int n;
         cin>>n;
@@ -265,14 +262,68 @@ public:
     }
 };
 
+void getTestData(string fileName){
+    ofstream file(fileName);
+    srand(static_cast<unsigned  int>(time(nullptr)));
+    int m = random(5)+1;
+    int n = random(100)+1;
+    file << m << " ";
+    file << n << "\n";
+    vector<Point> virus; //存储点对。
+    for(int k = 0; k < 5; k++){ //规定病毒有5种
+        Point p;
+        p.x = random(m);
+        p.y = random(n);
+        int flag = true;
+        for( int j = 0; j < virus.size(); j++){
+            if(virus[j].x == p.x && virus[j].y == p.y ){
+                flag = false;
+                break;
+            }
+        }
+        if( flag ){ //没找到
+            virus.push_back(p);
+        }else{
+            k--;
+        }
+    }
+    int id = 1;
+    for(int i = 0; i < m; i++){
+        for(int j = 0; j < n; j++){ //不是那几个点。就直接赋值。
+            Point temp;
+            temp.x = i;
+            temp.y = j;
+            int flag = true;
+            for( int k = 0; k < virus.size(); k++){ //找到点是否相同。
+                if(virus[k].x == temp.x && virus[k].y == temp.y ){
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag){ //没找到。
+                file << -random(500) << " ";
+            }else{
+                file << id++ << " ";
+            }
+        }
+        file << "\n";
+    }
+    int num = random(5)+1;
+    file << num << "\n";
+    for(int i = 0; i < num; i++){
+        file << i+1 <<"\n";
+    }
+}
+
 int main(int argc, const char * argv[]) {
-    freopen("aaa.txt", "r", stdin);
+    getTestData("test.txt");
+//    cout<<"aa"<<endl;
+    freopen("test.txt", "r", stdin);
     ios::sync_with_stdio(false);
     int row,col;
     while(cin>>row>>col && row!= 0 && col!= 0){
         Virus* virus = new Virus(row,col);
         virus->virusMain();
-        cout<<"哈哈"<<endl;
     }
     return 0;
 }

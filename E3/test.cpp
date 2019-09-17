@@ -6,10 +6,6 @@
 //  Copyright © 2019 Sisi Lee. All rights reserved.
 //
 
-#include <iostream>
-#include <vector>
-using namespace std;
-
 
 #include <iostream>
 #include<map>
@@ -34,7 +30,7 @@ void freshMap(string s){
         planet[s] = (signed)planet.size();
     }
 }
-void DFS (int u){
+void DFS (int u){ //L利用深度优先遍历的方式找到一条j可行的增广路，前向边不行则考虑后向边。
     int v;
     //一旦找到了一条到汇点的路就可以返回了
     if(visited[1] == 1){
@@ -59,7 +55,7 @@ void DFS (int u){
         }
     }
 }
-void adjustment(){
+void adjustment(){ //处理整条增广路，正向弧反向弧，记录这条路上的流量。
     int u,v,min = INF;
     for(v = 0; v < vsize; v++){
         if(remain[v] != 0 && remain[v] < min){
@@ -82,7 +78,6 @@ void adjustment(){
         }
         v = pre[u];
     }
-    
 }
 //
 void flagInit(){
@@ -130,7 +125,6 @@ int main(){
             c[planet[s1]][planet[s2]] = capacity;
         }
         vsize = (signed)planet.size(); //顶点数。
-//        cout<<"结束一个case;"<<endl;
         while (true) //要一直回溯查找增广路
         {
             flagInit();

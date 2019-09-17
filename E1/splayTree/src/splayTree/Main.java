@@ -4,8 +4,8 @@ import java.util.Random;
 import java.util.Set;
 
 public class Main {
-	static int NUMBER = 1010;
-	static int TIMES = 4000;
+	static int NUMBER = 10100;
+	static int TIMES = 10;
 	public static void main(String[] args) {
 		Set<Integer> set = new HashSet<Integer>();
 		int[] arr;
@@ -35,10 +35,12 @@ public class Main {
 //			for(int z : arr) {
 //				tree.remove(z);
 //			}
+			
 			for(int x : set) {
 				tree.insert(x);
 			}
 			long startTime =  System.currentTimeMillis();
+			
 			for( int z : set) {
 				tree.remove(z);
 			}

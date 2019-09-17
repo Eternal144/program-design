@@ -1,0 +1,22 @@
+2
+vase 5.00
+flower 2.00
+2
+1 flower 3 5.00
+2 flower 1 vase 2 10.00
+2
+flower 3
+vase 2
+1
+1 flower 3 5
+1 
+flower 6
+4
+1 flower 3 6.00
+2 flower 2 vase 1 7.00
+2 flower 4 vase 3 11.00
+2 flower 5 vase 2 9.00
+2
+flower 9
+vase 5
+-1

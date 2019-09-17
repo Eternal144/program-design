@@ -9,7 +9,9 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <fstream>
 #include <iomanip>
+#define random(x)(rand()%x)
 using namespace std;
 const static int INF = 0xffff;
 
@@ -22,8 +24,6 @@ class Ring{
 private:
     int num;
     float radius; //所求半径。
-//    float leftS; //左半边最短的长度。
-//    float rightS; //右半边最短的长度。
 public:
     vector<Point> pointArr; //记录所有玩具的坐标。
     vector<Point> pointSortX;
@@ -109,7 +109,6 @@ public:
             if(pointSortX[i].x >= s && pointSortX[i].x <= t){
                 //在这个区间有点。
                 flag = 1;
-                
                 //前一个点不在，后一个点也不在。之间只有一个点
 //                作为第一个被检测到的点：前面应该没有在范围内的了。
 //                当为最后一个点时：已经只有一个点
@@ -128,7 +127,7 @@ public:
                         return dis(pointSortX[i], pointSortX[i+1]);
                     }
                 }
-                break;
+//                break;
             }
         }
         if(flag == 0){ //在这段区间没点。
@@ -143,18 +142,20 @@ public:
             float right = delta == INF ? INF : mid + delta;
             //划分两边区域,把合适的点找出来，再根据原来y轴排序的顺序储存。
             vector<Point> temp;
-            for (int i = 0; i < num; i++){
+            for (int i = 0; i < num; i++){ //这里进行了n次遍历肯定是不行的。
                 if(pointSortY[i].x >= left && pointSortY[i].x <= right){
                     temp.push_back(pointSortY[i]);
                 }
             }
-            //只要那个区域里还有点没有考虑
-            for(int i = 0; i < temp.size()-1; i++){
-                for(int j = i+1; j < temp.size(); j++){
-                    if(temp[j].y - temp[i].y > delta){
-                        break;
-                    }else{
-                        delta = min(dis(temp[j],temp[i]),delta);
+            //只要那个区域里还有点没有考虑 。。。。 @@哭了这里忘记考虑size为0的情况。@@
+            if( temp.size() > 0){
+                for(int i = 0; i < temp.size()-1; i++){
+                    for(int j = i+1; j < temp.size(); j++){
+                        if(temp[j].y - temp[i].y > delta){
+                            break;
+                        }else{
+                            delta = min(dis(temp[j],temp[i]),delta);
+                        }
                     }
                 }
             }
@@ -163,20 +164,38 @@ public:
     }
     
     float getRadius(){
+        if( num == 1){
+            return 0;
+        }
         return divide(pointSortX[0].x,pointSortX[num-1].x);
     }
-    
 };
+
+void getTestData(string fileName){
+    ofstream file(fileName);
+    srand(static_cast<unsigned  int>(time(nullptr)));
+//    int n = random(100); // 输入测试数据
+    int n = 20000;
+    file << n <<"\n";
+    for (int j = 0; j < n; ++j) {
+        double x = rand() / (double) (RAND_MAX / 10000);
+        double y = rand() / (double) (RAND_MAX / 10000);
+        file << x << " " << y << "\n";
+    }
+    file << 0 << endl;
+}
+
 int main(int argc, const char * argv[]) {
+    getTestData("test.txt");
+    freopen("test.txt", "r", stdin);
     int n;
+    ios::sync_with_stdio(false);
     while(cin >> n && n!=0 ){
         Ring* ring = new Ring(n);
         ring->addPoint(); //添加了所有的点。按照快排的方式排序。
         ring->sort(); //根据x坐标和y坐标排序。排俩。
         float aa = ring->getRadius();
         cout<<"两个玩具最短距离为"<<fixed << showpoint << setprecision(2) <<aa/2<<endl;
-//        cout<<"哈哈哈"<<endl;
-//        printf("%.2f\n",aa);
     }
     return 0;
 }

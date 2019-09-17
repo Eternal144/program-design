@@ -9,10 +9,10 @@
 #include <iostream>
 #include <vector>
 #include <stack>
-//#include <cstring>
 #include <set>
 #include <cmath>
-//#include <memset>
+#include <fstream>
+#define random(x)(rand()%x)
 using namespace std;
 struct Edge{
     int s;
@@ -38,8 +38,6 @@ public:
         tree.resize(n);
     }
     void createTree(){
-//        cout<<tree[4]
-//        //接收u所有的边。
         for (int i = 0; i < nodeN-1; i++){  //输入边的时候就已经成树了。
             int s;int t;
             cin>>s>>t;
@@ -81,6 +79,7 @@ public:
         }
         return 0;
     }
+    //真正找公共祖先。
     int search(int n, int s, int t){
         //判断所有的儿子
         set<int>::iterator it = tree[n].adjNodes.begin();
@@ -93,6 +92,7 @@ public:
         }
         return n;
     }
+    //获取a和b最近的共同祖先。
     int getLastCommonAnc(int a, int b){
         int s = min(tree[a].pushTime,tree[b].pushTime);
         int t = max(tree[a].popTime,tree[b].popTime);
@@ -127,7 +127,6 @@ public:
         }else{
             cout<<"no"<<endl;
         }
-        
     }
     //输入测试数据。
     void inputForJudge(){
@@ -146,10 +145,51 @@ public:
         record();
         inputForJudge();
     }
-    
 };
+
+void getTestData(string fileName){
+    ofstream file(fileName);
+    srand(static_cast<unsigned  int>(time(nullptr)));
+    int num = random(100);
+    file << num << "\n";
+    set<int> connect;
+    set<int> unconnect;
+    connect.insert(0); //未连接村庄
+    for(int i = 1; i < num; i++){ //已连接村庄。
+        unconnect.insert(i);
+    }
+    for(int i = 0; i < num-1; i++){
+        //从连接和未连接中随机拿一个。
+        int a = random(connect.size()); //0
+        set<int>::iterator ita = connect.begin();
+        while(a!=0){
+            ita++;
+            a--;
+        }
+        a = random(unconnect.size());
+        set<int>::iterator itb = unconnect.begin();
+        while(a!=0){
+            itb++;
+            a--;
+        }
+        connect.insert(*itb);
+        unconnect.erase(*itb);
+        file << *ita <<" "<< *itb <<"\n";
+    }
+    int testN = random(5000);
+    file << testN <<"\n";
+    for(int j = 0; j < testN; j++){
+        int a = random(num);
+        int b = random(num);
+        int c = random(num);
+        file << a <<" "<< b <<" "<< c <<"\n";
+    }
+    file << 0 <<"\n";
+}
+
 int main(int argc, const char * argv[]) {
-    freopen("aaa.txt","r",stdin);
+    getTestData("test.txt");
+    freopen("test.txt","r",stdin);
     ios::sync_with_stdio(false);
     int nodeN;
     while(cin>>nodeN && nodeN!=0){

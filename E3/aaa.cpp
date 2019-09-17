@@ -137,7 +137,6 @@ int main(){
         travel.init();
         travel.freshMap(src);
         travel.freshMap(dest);
-//        travel.freshMap();
         for(int i = 0; i < num; i++){
             string s1,s2;
             int capacity;
